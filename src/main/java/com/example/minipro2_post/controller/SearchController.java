@@ -44,6 +44,7 @@ public class SearchController {
 //        return ResponseEntity.ok(postEntity);
 //    }
 
+    // 게시글 검색 - 태그, 내용, 이메일
     @PostMapping
     public ResponseEntity<?> search(@RequestBody HashMap<String, Object> map) {
         // 검색 유형을 확인

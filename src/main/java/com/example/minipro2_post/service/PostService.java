@@ -87,6 +87,14 @@ public class PostService {
         return postRepository.findById(pid)
                 .filter(postEntity -> postEntity.getUid().equals(result))
                 .map(post -> {
+                    // 게시글 타입 검증
+                    if (postDto.getType() != null &&
+                            !postDto.getType().equals("public") &&
+                            !postDto.getType().equals("group") &&
+                            !postDto.getType().equals("groupOnly")) {
+                        throw new IllegalArgumentException("게시글 타입이 옳지 않습니다.");
+                    }
+
                     Optional.ofNullable(postDto.getContent()).ifPresent(post::setContent);
                     Optional.ofNullable(postDto.getTag()).ifPresent(post::setTag);
                     Optional.ofNullable(postDto.getType()).ifPresent(post::setType);
