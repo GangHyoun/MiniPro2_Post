@@ -42,6 +42,7 @@ jobs:
       - name : SSH로 EC2에 접속후 서버가동
         uses: appleboy/ssh-action@v1.2.0
 
+# 서버 8081
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
