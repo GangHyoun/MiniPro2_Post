@@ -4,6 +4,7 @@ import com.example.minipro2_post.dto.CommentDto;
 import com.example.minipro2_post.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +35,11 @@ public class CommentController {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
+    @Autowired
+    private Environment env;
+
+    String release_ip = env.getProperty("app.user_ip");
+
     // cmt 페이지 확인
     @GetMapping
     public ResponseEntity<String> mainPage() {
@@ -48,7 +53,7 @@ public class CommentController {
             @RequestBody CommentDto commentDto) {
 
         // User 쪽에 uid 요청(gid도 요청 가능)
-        Mono<Long> webClient = webClientBuilder.baseUrl("http://localhost:8083").build()
+        Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
                 .contentType(MediaType.APPLICATION_JSON) // json 형태로 전달
@@ -59,7 +64,7 @@ public class CommentController {
 
 //        List<Long> gid = new ArrayList<>();
         // GID 확인
-        Mono<List<Long>> webClient_2 = webClientBuilder.baseUrl("http://localhost:8083").build()
+        Mono<List<Long>> webClient_2 = webClientBuilder.baseUrl(release_ip).build()
                 .get()
                 .uri(uriBuilder -> uriBuilder.path("/user/groupCheck")
                         .queryParam("email", email).build())
@@ -80,7 +85,7 @@ public class CommentController {
             @RequestHeader("X-Auth-User") String email,
             @RequestBody CommentDto commentDto) {
 
-        Mono<Long> webClient = webClientBuilder.baseUrl("http://localhost:8083").build()
+        Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
                 .contentType(MediaType.APPLICATION_JSON) // json 형태로 전달
@@ -96,7 +101,7 @@ public class CommentController {
     @DeleteMapping("delete/{cid}")
     public ResponseEntity<String> deleteComment(@PathVariable Long cid,
                                                 @RequestHeader("X-Auth-User") String email) {
-        Mono<Long> webClient = webClientBuilder.baseUrl("http://localhost:8083").build()
+        Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
                 .contentType(MediaType.APPLICATION_JSON) // json 형태로 전달

@@ -52,6 +52,6 @@ jobs:
             mkdir /home/ubuntu/server/web
             mv /home/ubuntu/server/demo/run.jar /home/ubuntu/server/web/run.jar
             cd /home/ubuntu/server/web
-            sudo fuser -k -n tcp 8080 || true
+            sudo fuser -k -n tcp 8081 || true
             nohup java -jar run.jar > ./output.log 2>&1 &
             rm -rf /home/ubuntu/server/demo

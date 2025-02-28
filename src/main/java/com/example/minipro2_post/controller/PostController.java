@@ -4,6 +4,7 @@ import com.example.minipro2_post.dto.PostDto;
 import com.example.minipro2_post.service.PostService;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +23,17 @@ public class PostController {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
+    @Autowired
+    private Environment env;
+
+    String release_ip = env.getProperty("app.user_ip");
 
     // 게시글 작성
     @PostMapping("/create")
     @JsonBackReference
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto,
                                                  @RequestHeader("X-Auth-User") String email) {
-        Mono<Long> webClient = webClientBuilder.baseUrl("http://localhost:8083").build()
+        Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -45,7 +50,7 @@ public class PostController {
     @PutMapping("/modify/{pid}")
     public ResponseEntity<PostDto> modifyPost(@PathVariable Long pid, @RequestBody PostDto postDto,
                                                  @RequestHeader("X-Auth-User") String email) {
-        Mono<Long> webClient = webClientBuilder.baseUrl("http://localhost:8083").build()
+        Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -62,7 +67,7 @@ public class PostController {
     // 게시글 삭제
     @DeleteMapping("/delete/{pid}")
     public ResponseEntity<String> deletePost(@PathVariable Long pid, @RequestHeader("X-Auth-User") String email) {
-        Mono<Long> webClient = webClientBuilder.baseUrl("http://localhost:8083").build()
+        Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -93,7 +98,7 @@ public class PostController {
     // 좋아요 토글
     @PutMapping("/toggleLike/{pid}")
     public ResponseEntity<String> toggleLike(@PathVariable Long pid, @RequestHeader("X-Auth-User") String email) {
-        Mono<Long> webClient = webClientBuilder.baseUrl("http://localhost:8083").build()
+        Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
                 .contentType(MediaType.APPLICATION_JSON)

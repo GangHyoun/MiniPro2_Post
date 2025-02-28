@@ -6,6 +6,7 @@ import com.example.minipro2_post.repository.PostRepository;
 import com.example.minipro2_post.repository.PostTagRepository;
 import com.example.minipro2_post.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -34,11 +35,16 @@ public class SearchService {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
+    @Autowired
+    private Environment env;
+
+    String release_ip = env.getProperty("app.user_ip");
+
     // 이메일 검색
     public List<PostDto> searchByEmail(String email) {
         try {
             // email 검색을 위한 API 호출
-            Mono<Long> webClient = webClientBuilder.baseUrl("http://localhost:8083").build()
+            Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                     .post()
                     .uri("/user/checkemail")
                     .contentType(MediaType.APPLICATION_JSON)
