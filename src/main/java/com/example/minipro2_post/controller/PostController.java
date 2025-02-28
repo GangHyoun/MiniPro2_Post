@@ -26,13 +26,13 @@ public class PostController {
     @Autowired
     private Environment env;
 
-    String release_ip = env.getProperty("app.user_ip");
 
     // 게시글 작성
     @PostMapping("/create")
     @JsonBackReference
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto,
                                                  @RequestHeader("X-Auth-User") String email) {
+        String release_ip = env.getProperty("app.user_ip");
         Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
@@ -50,6 +50,7 @@ public class PostController {
     @PutMapping("/modify/{pid}")
     public ResponseEntity<PostDto> modifyPost(@PathVariable Long pid, @RequestBody PostDto postDto,
                                                  @RequestHeader("X-Auth-User") String email) {
+        String release_ip = env.getProperty("app.user_ip");
         Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
@@ -67,6 +68,7 @@ public class PostController {
     // 게시글 삭제
     @DeleteMapping("/delete/{pid}")
     public ResponseEntity<String> deletePost(@PathVariable Long pid, @RequestHeader("X-Auth-User") String email) {
+        String release_ip = env.getProperty("app.user_ip");
         Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
@@ -98,6 +100,7 @@ public class PostController {
     // 좋아요 토글
     @PutMapping("/toggleLike/{pid}")
     public ResponseEntity<String> toggleLike(@PathVariable Long pid, @RequestHeader("X-Auth-User") String email) {
+        String release_ip = env.getProperty("app.user_ip");
         Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")

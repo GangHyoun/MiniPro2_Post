@@ -38,11 +38,11 @@ public class SearchService {
     @Autowired
     private Environment env;
 
-    String release_ip = env.getProperty("app.user_ip");
 
     // 이메일 검색
     public List<PostDto> searchByEmail(String email) {
         try {
+            String release_ip = env.getProperty("app.user_ip");
             // email 검색을 위한 API 호출
             Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                     .post()

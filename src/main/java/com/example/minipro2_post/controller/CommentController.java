@@ -38,7 +38,7 @@ public class CommentController {
     @Autowired
     private Environment env;
 
-    String release_ip = env.getProperty("app.user_ip");
+
 
     // cmt 페이지 확인
     @GetMapping
@@ -51,6 +51,7 @@ public class CommentController {
             @PathVariable Long pid,
             @RequestHeader("X-Auth-User") String email,
             @RequestBody CommentDto commentDto) {
+        String release_ip = env.getProperty("app.user_ip");
 
         // User 쪽에 uid 요청(gid도 요청 가능)
         Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
@@ -84,6 +85,7 @@ public class CommentController {
             @PathVariable Long cid,
             @RequestHeader("X-Auth-User") String email,
             @RequestBody CommentDto commentDto) {
+        String release_ip = env.getProperty("app.user_ip");
 
         Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
@@ -101,6 +103,7 @@ public class CommentController {
     @DeleteMapping("delete/{cid}")
     public ResponseEntity<String> deleteComment(@PathVariable Long cid,
                                                 @RequestHeader("X-Auth-User") String email) {
+        String release_ip = env.getProperty("app.user_ip");
         Mono<Long> webClient = webClientBuilder.baseUrl(release_ip).build()
                 .post()
                 .uri("/user/checkemail")
